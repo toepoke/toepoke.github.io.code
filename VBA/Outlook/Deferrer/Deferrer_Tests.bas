@@ -2,12 +2,16 @@ Attribute VB_Name = "Deferrer_Tests"
 Option Explicit
 
 Public Const DEFER_DELIM As String = "::"
+' Set as "-1" to run all tests
+Private Const mRunOnly As Integer = -1
 Private mFromDate As Date
+
 
 ''' <summary>
 ''' Some test scenarios to ensure the deferment works as expected.
 ''' </summary>
 Public Sub RunTests()
+  
   mFromDate = "12-MAR-2015 14:20"
   
   ' No delim => send immediately
@@ -32,6 +36,27 @@ Public Sub RunTests()
   RunTest 12, "19-MAR-2015 15:15", "::on 19-MAR-2015 at 3:15pm"
   RunTest 13, "01-JAN-1900", "::on 19-MAR-2000 at 3:15pm", "Should raise error as 'on' date is in the past"
   
+  ' ":: on X-day at 2pm"
+  RunTest 14, "12-MAR-2015 14:00", "::on Today at 2pm", "Should be today as we asked for today"
+  RunTest 15, "13-MAR-2015 14:00", "::on Tomorrow at 2pm", "Should be the Friday, as Tomorrow is Friday"
+  RunTest 16, "13-MAR-2015 14:00", "::on Friday at 2pm", "Should be Friday as well as Tomrrow"
+  RunTest 17, "19-MAR-2015 14:00", "::on Thursday at 2pm", "Should be next week as we start from today, but ask for Thursday"
+  
+  ' Full week check (we've done Friday above, we only do one week ahead)
+  RunTest 18, "14-MAR-2015 14:00", "::on Sat at 2pm"
+  RunTest 19, "15-MAR-2015 14:00", "::on Sun at 2pm"
+  RunTest 20, "16-MAR-2015 14:00", "::on Mon at 2pm"
+  RunTest 21, "17-MAR-2015 14:00", "::on Tue at 2pm"
+  RunTest 22, "18-MAR-2015 14:00", "::on Wed at 2pm"
+  RunTest 23, "19-MAR-2015 14:00", "::on Thu at 2pm"
+  
+  ' Today/Tomorrow but without "on" prefix
+  RunTest 24, "12-MAR-2015 14:00", "::Today at 2pm"
+  RunTest 25, "13-MAR-2015 14:30", "::Tomorrow at 2:30pm"
+  ' Test short version
+  RunTest 26, "12-MAR-2015 14:00", "::Tod at 2pm"
+  RunTest 27, "13-MAR-2015 14:30", "::Tom at 2:30pm"
+  
 End Sub
 
 
@@ -39,6 +64,10 @@ End Sub
 ''' Helper method for running our tests (see RunTests) to ensure the deferment code works as expected.
 ''' </summary>
 Private Function RunTest(scenarioNum As Integer, expected As Date, scenario As String, Optional message As String = "") As Boolean
+  If mRunOnly > -1 And mRunOnly <> scenarioNum Then
+    ' Only running a single test and it isn't this one
+    Exit Function
+  End If
   Dim actual As Date
   Dim pass As Boolean
   Dim testNum As String
