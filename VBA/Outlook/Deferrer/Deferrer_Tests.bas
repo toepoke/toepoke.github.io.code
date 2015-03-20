@@ -39,10 +39,10 @@ Public Sub RunTests()
   ' ":: on X-day at 2pm"
   RunTest 14, "12-MAR-2015 14:00", "::on Today at 2pm", "Should be today as we asked for today"
   RunTest 15, "13-MAR-2015 14:00", "::on Tomorrow at 2pm", "Should be the Friday, as Tomorrow is Friday"
-  RunTest 16, "13-MAR-2015 14:00", "::on Friday at 2pm", "Should be Friday as well as Tomrrow"
+  RunTest 16, "13-MAR-2015 14:00", "::on Friday at 2pm", "Should be Friday as well as Tomorrow"
   RunTest 17, "19-MAR-2015 14:00", "::on Thursday at 2pm", "Should be next week as we start from today, but ask for Thursday"
   
-  ' Full week check (we've done Friday above, we only do one week ahead)
+  ' LONG VERSION: Full week check (we've done Friday above, we only do one week ahead)
   RunTest 18, "14-MAR-2015 14:00", "::on Sat at 2pm"
   RunTest 19, "15-MAR-2015 14:00", "::on Sun at 2pm"
   RunTest 20, "16-MAR-2015 14:00", "::on Mon at 2pm"
@@ -50,12 +50,20 @@ Public Sub RunTests()
   RunTest 22, "18-MAR-2015 14:00", "::on Wed at 2pm"
   RunTest 23, "19-MAR-2015 14:00", "::on Thu at 2pm"
   
+  ' SHORT VERSION: Full week check (we've done Friday above, we only do one week ahead)
+  RunTest 24, "14-MAR-2015 14:00", "::Sat at 2pm"
+  RunTest 25, "15-MAR-2015 14:00", "::Sun at 2pm"
+  RunTest 26, "16-MAR-2015 14:00", "::Mon at 2pm"
+  RunTest 27, "17-MAR-2015 14:00", "::Tue at 2pm"
+  RunTest 28, "18-MAR-2015 14:00", "::Wed at 2pm"
+  RunTest 29, "19-MAR-2015 14:00", "::Thu at 2pm"
+  
   ' Today/Tomorrow but without "on" prefix
-  RunTest 24, "12-MAR-2015 14:00", "::Today at 2pm"
-  RunTest 25, "13-MAR-2015 14:30", "::Tomorrow at 2:30pm"
+  RunTest 30, "12-MAR-2015 14:00", "::Today at 2pm"
+  RunTest 31, "13-MAR-2015 14:30", "::Tomorrow at 2:30pm"
   ' Test short version
-  RunTest 26, "12-MAR-2015 14:00", "::Tod at 2pm"
-  RunTest 27, "13-MAR-2015 14:30", "::Tom at 2:30pm"
+  RunTest 32, "12-MAR-2015 14:00", "::Tod at 2pm"
+  RunTest 33, "13-MAR-2015 14:30", "::Tom at 2:30pm"
   
 End Sub
 

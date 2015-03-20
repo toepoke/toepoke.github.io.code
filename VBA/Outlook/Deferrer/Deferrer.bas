@@ -48,7 +48,7 @@ Public Function GetDeferredDate(inScenario As String, fromDate As Date) As Date
   ' Convert into elements for processing
   arr = Split(scenario, " ")
   
-  If IsToday(arr(0)) Or IsTomorrow(arr(0)) Then
+  If IsToday(arr(0)) Or IsTomorrow(arr(0)) Or GetDayOfWeekNumber(arr(0)) > -1 Then
     ' TODAY or TOMORROW, either way just re-use what we already have:
     scenario = ":: on " & scenario
     d = GetDeferredDate(scenario, fromDate)
@@ -153,7 +153,7 @@ Private Function GetOnDateAt(scenario, options() As String, fromDate As Date) As
   d = CDate(dateStr)
   answer = GetDateSerial(CStr(d)) + GetTimeSerial(tmStr)
   
-  If answer < Now Then
+  If answer < fromDate Then
     mError = """" & scenario & """" & " is in the past ... move to tomorrow?"
     answer = ILLEGAL_DATE
   End If
