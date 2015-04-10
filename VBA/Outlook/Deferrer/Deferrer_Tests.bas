@@ -64,6 +64,7 @@ Public Sub RunTests()
   ' Test short version
   RunTest 32, "12-MAR-2015 14:00", "::Tod at 2pm"
   RunTest 33, "13-MAR-2015 14:30", "::Tom at 2:30pm"
+  RunTest 34, "13-MAR-2015 14:20", "::Tomorrow"
   
 End Sub
 

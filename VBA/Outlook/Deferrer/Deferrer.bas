@@ -177,7 +177,13 @@ Private Function GetOnDayAt(scenario, options() As String, fromDate As Date) As 
   Dim currDate As Date
   
   dayStr = options(1)
-  timeStr = options(3)
+  If UBound(options) = 1 Then
+    ' No time component present, use current time (dervied from the fromDate - testing)
+    timeStr = GetTimeSerial(Right(CStr(fromDate), 8))
+  Else
+    ' Take time component as defined
+    timeStr = options(3)
+  End If
   
   
   ' Start from our offset
@@ -237,7 +243,7 @@ Private Function GetTimeSerial(timeInput As String) As Date
   
   args = Split(timeStr, ":")
   hh = CInt(args(0))
-  If UBound(args) = 1 Then
+  If UBound(args) >= 1 Then
     ' Have minutes
     mm = CInt(args(1))
   End If
