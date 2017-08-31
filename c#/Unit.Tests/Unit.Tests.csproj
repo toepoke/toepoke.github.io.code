@@ -60,6 +60,7 @@
     <Compile Include="EnumExtensionsExample\EnumExtensionTests.cs" />
     <Compile Include="ForEachGenericMethodExample\ForEachGenericMethod.cs" />
     <Compile Include="ForEachGenericMethodExample\ForEachGenericMethodTests.cs" />
+    <Compile Include="Misc\AtSigns_In_Variables.cs" />
     <Compile Include="PlayingWithMocking\MockingSmtp\Communications-Service.cs" />
     <Compile Include="PlayingWithMocking\MockingSmtp\ISmtpClient.cs" />
     <Compile Include="PlayingWithMocking\MockingSmtp\SmtpDependencyUnitTests.cs" />
