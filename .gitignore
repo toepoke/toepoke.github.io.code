@@ -41,3 +41,6 @@ Icon
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+/c#/Unit.Tests/bin/Debug
+/.vs/toepoke.github.io.code/v15/.suo
+/.vs/toepoke.github.io.code/v15/.suo
