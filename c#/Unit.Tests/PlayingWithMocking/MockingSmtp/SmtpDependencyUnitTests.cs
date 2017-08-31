@@ -36,6 +36,9 @@ namespace Misc.Tests.PlayingWithMocking.MockingSmtp
 			// Assert
 			Assert.AreEqual(1, commsService.GetSentLog().Count);
 			Assert.AreEqual("test@junge.f9.co.uk", commsService.GetSentLog()[0]);
+
+			// Ensure send call was run as expected
+			smtp.Received().Send("test@junge.f9.co.uk", "test@junge.f9.co.uk", "Hello You.", "Welcome to our service");
 		}
 
 		[TestMethod]
