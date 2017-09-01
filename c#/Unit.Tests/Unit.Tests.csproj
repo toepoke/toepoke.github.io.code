@@ -41,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
@@ -61,6 +63,7 @@
     <Compile Include="ForEachGenericMethodExample\ForEachGenericMethod.cs" />
     <Compile Include="ForEachGenericMethodExample\ForEachGenericMethodTests.cs" />
     <Compile Include="Misc\AtSigns_In_Variables.cs" />
+    <Compile Include="Misc\Authentication.Tests.cs" />
     <Compile Include="PlayingWithMocking\MockingSmtp\Communications-Service.cs" />
     <Compile Include="PlayingWithMocking\MockingSmtp\ISmtpClient.cs" />
     <Compile Include="PlayingWithMocking\MockingSmtp\SmtpDependencyUnitTests.cs" />
