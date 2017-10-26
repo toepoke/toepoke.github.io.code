@@ -38,6 +38,7 @@ namespace Unit.Tests.Misc
 		/// <summary>
 		/// Illustrates how to establish if someone is within a given role in Active Directory
 		/// </summary>
+		/// <seealso cref="https://msdn.microsoft.com/en-us/library/86wd8zba(v=vs.110).aspx"/>
 		[TestMethod]
 		public void Can_Check_IsInRole() {
 			const string ROLE_NAME = "Everyone";
@@ -123,7 +124,7 @@ namespace Unit.Tests.Misc
 			}
 
 			public static new UserPrincipalExtension FindByIdentity(PrincipalContext context, IdentityType identityType, string identityValue) {
-        return (UserPrincipalExtension)FindByIdentityWithType(context, typeof(UserPrincipalExtension), identityType, identityValue);
+				return (UserPrincipalExtension)FindByIdentityWithType(context, typeof(UserPrincipalExtension), identityType, identityValue);
 	    }
 
 		} // UserPrincipalExtension
