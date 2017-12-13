@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,6 +44,9 @@
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
@@ -65,6 +69,21 @@
     <Compile Include="Misc\AtSigns_In_Variables.cs" />
     <Compile Include="Misc\Authentication.Tests.cs" />
     <Compile Include="Misc\VS2017_Debugger_Improvements.Tests.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 6.0\CSharp6 - Await inside catch...finally.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 6.0\CSharp6 - Null Conditional Operators.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 6.0\CSharp6 - Expression Bodied Members.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 6.0\CSharp6 - Exception Filters.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 6.0\CSharp6 - Auto Property Initialisers.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 6.0\CSharp6 - Using Statement For Static Methods.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 7.0\CSharp7 - Out keyword Improvements.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 7.0\CSharp7 - Tuples.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 7.0\CSharp7 - Local Functions.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 7.0\CSharp7 - Pattern Matching.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 7.0\CSharp7 - Return By Reference.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 7.1\CSharp7.1 - Inferring Tuple Names.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 7.1\CSharp7.1.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 7.2\CSharp7.2 - Leading Underscores.cs" />
+    <Compile Include="NewCSharpFeatures\CSharp 7.2\CSharp7.2 - Reference Sematics With Value Types.cs" />
     <Compile Include="PlayingWithMocking\MockingSmtp\Communications-Service.cs" />
     <Compile Include="PlayingWithMocking\MockingSmtp\ISmtpClient.cs" />
     <Compile Include="PlayingWithMocking\MockingSmtp\SmtpDependencyUnitTests.cs" />
@@ -78,7 +97,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="Snippets\tipple-a.snippet" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
