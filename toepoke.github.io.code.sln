@@ -31,6 +31,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Profiling", "Profiling", "{
 		Profiling\performance-template.tdf = Profiling\performance-template.tdf
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Snippets", "Snippets", "{2D3F1BDA-FF1A-452B-ADF0-E5B54DE37F3F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{8BF9ECA9-5E46-4520-8498-344B4A1EAB1C}"
+	ProjectSection(SolutionItems) = preProject
+		Snippets\CSharp\tipple-a.snippet = Snippets\CSharp\tipple-a.snippet
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +57,7 @@ Global
 		{82E385CB-87E8-40E4-8283-C9ACF843E797} = {641EEFCC-2B05-4D27-AE76-53BE5D0C923A}
 		{16C5F9B6-5B20-468C-B49F-526A92628244} = {641EEFCC-2B05-4D27-AE76-53BE5D0C923A}
 		{477DF042-7B0A-49F9-9E88-D6C132DD21D9} = {114B9DE7-409F-489C-906E-0EE22A2754B0}
+		{8BF9ECA9-5E46-4520-8498-344B4A1EAB1C} = {2D3F1BDA-FF1A-452B-ADF0-E5B54DE37F3F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0642E3F2-FB16-4541-B2E2-0A2D43555A7D}
