@@ -5,7 +5,31 @@ VisualStudioVersion = 15.0.27130.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Tests", "c#\Unit.Tests\Unit.Tests.csproj", "{527DBF58-2681-4980-9EAA-43A3904EF011}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Sql", "Sql\Sql.sqlproj", "{56A1648C-1889-48BC-81FF-AE4D4090C3C6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{114B9DE7-409F-489C-906E-0EE22A2754B0}"
+	ProjectSection(SolutionItems) = preProject
+		Sql\add-indexes-for-foreign-key-constraints.sql = Sql\add-indexes-for-foreign-key-constraints.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VBA", "VBA", "{07D6EDB1-BAFC-4BB3-980D-707C62886C29}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Outlook", "Outlook", "{641EEFCC-2B05-4D27-AE76-53BE5D0C923A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deferrer", "Deferrer", "{82E385CB-87E8-40E4-8283-C9ACF843E797}"
+	ProjectSection(SolutionItems) = preProject
+		VBA\Outlook\Deferrer\Deferrer.bas = VBA\Outlook\Deferrer\Deferrer.bas
+		VBA\Outlook\Deferrer\Deferrer_Tests.bas = VBA\Outlook\Deferrer\Deferrer_Tests.bas
+		VBA\Outlook\Deferrer\ThisOutlookSession.cls = VBA\Outlook\Deferrer\ThisOutlookSession.cls
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FolderHelper", "FolderHelper", "{16C5F9B6-5B20-468C-B49F-526A92628244}"
+	ProjectSection(SolutionItems) = preProject
+		VBA\Outlook\FolderHelper\FolderHelper.bas = VBA\Outlook\FolderHelper\FolderHelper.bas
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Profiling", "Profiling", "{477DF042-7B0A-49F9-9E88-D6C132DD21D9}"
+	ProjectSection(SolutionItems) = preProject
+		Profiling\performance-template.tdf = Profiling\performance-template.tdf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,15 +41,15 @@ Global
 		{527DBF58-2681-4980-9EAA-43A3904EF011}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{527DBF58-2681-4980-9EAA-43A3904EF011}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{527DBF58-2681-4980-9EAA-43A3904EF011}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56A1648C-1889-48BC-81FF-AE4D4090C3C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56A1648C-1889-48BC-81FF-AE4D4090C3C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56A1648C-1889-48BC-81FF-AE4D4090C3C6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{56A1648C-1889-48BC-81FF-AE4D4090C3C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56A1648C-1889-48BC-81FF-AE4D4090C3C6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56A1648C-1889-48BC-81FF-AE4D4090C3C6}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{641EEFCC-2B05-4D27-AE76-53BE5D0C923A} = {07D6EDB1-BAFC-4BB3-980D-707C62886C29}
+		{82E385CB-87E8-40E4-8283-C9ACF843E797} = {641EEFCC-2B05-4D27-AE76-53BE5D0C923A}
+		{16C5F9B6-5B20-468C-B49F-526A92628244} = {641EEFCC-2B05-4D27-AE76-53BE5D0C923A}
+		{477DF042-7B0A-49F9-9E88-D6C132DD21D9} = {114B9DE7-409F-489C-906E-0EE22A2754B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0642E3F2-FB16-4541-B2E2-0A2D43555A7D}
