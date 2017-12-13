@@ -38,6 +38,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{8BF9EC
 		Snippets\CSharp\tipple-a.snippet = Snippets\CSharp\tipple-a.snippet
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cmd", "Cmd", "{D2C2BD45-F43D-4FF3-9CEC-F242E9E0F7FE}"
+	ProjectSection(SolutionItems) = preProject
+		Cmd\get-timestamp-filename.cmd = Cmd\get-timestamp-filename.cmd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
