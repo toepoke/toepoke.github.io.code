@@ -45,6 +45,9 @@ Public Function GetDeferredDate(inScenario As String, fromDate As Date) As Date
   ' Extract whatever is after the "::" delimiter
   scenario = Trim(Mid(inScenario, delimPos + Len(DEFER_DELIM)))
   
+  ' Ensure we only have a single whitespace betweek tokens
+  scenario = Utils.ReplaceMultiples(scenario, " ")
+  
   ' Convert into elements for processing
   arr = Split(scenario, " ")
   
@@ -315,4 +318,6 @@ End Function
 Private Function IsTomorrow(dayStr As String) As Boolean
   IsTomorrow = Left(UCase(dayStr), 3) = "TOM"
 End Function
+
+
 
