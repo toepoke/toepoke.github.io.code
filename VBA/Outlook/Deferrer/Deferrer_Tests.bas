@@ -13,7 +13,7 @@ Private mFromDate As Date
 Public Sub RunTests()
   
   mFromDate = "12-MAR-2015 14:20"
-  
+    
   ' No delim => send immediately
   RunTest 0, mFromDate, ""
   
@@ -65,7 +65,8 @@ Public Sub RunTests()
   RunTest 32, "12-MAR-2015 14:00", "::Tod at 2pm"
   RunTest 33, "13-MAR-2015 14:30", "::Tom at 2:30pm"
   RunTest 34, "13-MAR-2015 14:20", "::Tomorrow"
-  
+  RunTest 35, "01-JAN-2018 08:00", "on  01-JAN-2018 at 8am"
+
 End Sub
 
 
@@ -101,5 +102,3 @@ Private Function RunTest(scenarioNum As Integer, expected As Date, scenario As S
     Debug.Print "---------------------------------------"
   End If
 End Function
-
-
