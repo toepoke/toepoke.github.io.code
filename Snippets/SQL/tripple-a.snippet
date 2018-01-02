@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+	<Header>
+	<Title>Arrange/Act/Assert</Title>
+	<Shortcut>Shortcuts don't work in SQL Management studio - use CTRL+K, CTRL+X</Shortcut>
+	<Description>Creates a new tSQLt unit test procedure.</Description>
+	<Author>n/a</Author>
+	<SnippetTypes>
+		<SnippetType>Expansion</SnippetType>
+	</SnippetTypes>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>TestNamespace</ID>
+				<ToolTip>Namespace of the test</ToolTip>
+				<Default>SomethingTests</Default>
+			</Literal>
+			<Literal>
+				<ID>TestName</ID>
+				<ToolTip>Name of the test</ToolTip>
+				<Default>Sample_View</Default>
+			</Literal>
+			<Literal>
+				<ID>TestDescription</ID>
+				<ToolTip>Description of what the test is trying to achieve</ToolTip>
+				<Default></Default>
+			</Literal>
+		</Declarations>
+		<Code Language="SQL">
+			<![CDATA[
+-- ****************************************************************************
+-- TEST: [test $TestName$]
+create procedure $TestNamespace$.[test $TestName$) $TestDescription$]
+as
+begin
+	-- Arrange
+
+	-- Act
+
+	-- Assert
+
+end
+go
+
+exec tSQLt.Run '$TestNamespace$.[test $TestName$) $TestDescription$]'
+go
+]]>
+		</Code>
+	</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
+
