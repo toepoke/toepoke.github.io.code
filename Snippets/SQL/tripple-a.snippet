@@ -25,9 +25,9 @@
 				<Default>SomethingTests</Default>
 			</Literal>
 			<Literal>
-				<ID>TestName</ID>
-				<ToolTip>Name of the test</ToolTip>
-				<Default>Sample_View</Default>
+				<ID>TestNumber</ID>
+				<ToolTip>Number of the test - I find it useful to number them, then use the description as the name of the test</ToolTip>
+				<Default>#01</Default>
 			</Literal>
 			<Literal>
 				<ID>TestDescription</ID>
@@ -38,21 +38,24 @@
 		<Code Language="SQL">
 			<![CDATA[
 -- ****************************************************************************
--- TEST: [test $TestName$]
-create procedure $TestNamespace$.[test $TestName$) $TestDescription$]
+-- TEST #$TestNumber$
+create procedure $TestNamespace$.[test #$TestNumber$) $TestDescription$.]
 as
 begin
+	-- Setup (e.g. FakeFunction, Db constraints, etc)
+	
 	-- Arrange
 
 	-- Act
 
 	-- Assert
-
+	exec tSQLt.assertEquals 'TEST STUBB HAS BEEN CREATED.', 'TEST STUBB HAS BEEN CREATED.';
 end
 go
 
-exec tSQLt.Run '$TestNamespace$.[test $TestName$) $TestDescription$]'
-go
+-- The following is added for convenience (when resolving one failing file)
+--exec tSQLt.Run '$TestNamespace$.[test #$TestNumber$) $TestDescription$.]'
+--go
 ]]>
 		</Code>
 	</Snippet>
