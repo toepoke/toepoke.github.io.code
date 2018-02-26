@@ -3,13 +3,13 @@
 -- DbName:    n/a - general purpose script
 --
 -- Explanation:
---   The purpose of this script is to list any foreign keys that do not have an associated
+--    The purpose of this script is to list any foreign keys that do not have an associated
 -- index (generally it's a good idea to have indexes on FKs - _not_always_ but generally)
 --
---   The output is in the form of a script that will create the indexes for you.  Just remove the ones
+--    The output is in the form of a script that will create the indexes for you.  Just remove the ones
 -- you don't want to create an index for (e.g. the table has a low number of rows).
 --
---   Any FKs you don't want as an index, as to the exclusions where clause so they don't always appear :-)
+--    Any FKs you don't want as an index, as to the exclusions where clause so they don't always appear :-)
 -- 
 -- References:
 --  - https://stackoverflow.com/questions/10735407/sql-server-create-indexes-on-foreign-keys-where-necessary
@@ -18,7 +18,7 @@ SELECT
 	* 
 FROM 
 (
-	SELECT TOP 99 PERCENT
+	SELECT TOP 99.99999999 PERCENT
 			f.name AS ForeignKeyName
 
 		, s.name 
