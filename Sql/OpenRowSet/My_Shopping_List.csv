@@ -1,0 +1,4 @@
+Id,Category,BasketItem,
+1,Food,Milk,"Column with no name (""F3"" when importing from Excel)", "another"
+2,Food,Bread,
+3,Pet,Food,
