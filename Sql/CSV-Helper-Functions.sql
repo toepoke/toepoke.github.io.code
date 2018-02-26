@@ -6,6 +6,8 @@
 --	Set of functions for delimiting strings into something useful
 --	Yes this should probably use tSQLt but I want to keep helpers isolated :-)
 --
+--  Whilst these are helpful, I wouldn't use them in a query, it won't be very efficient.  Fine for SP use though.
+--
 -- References:
 --  - None
 
