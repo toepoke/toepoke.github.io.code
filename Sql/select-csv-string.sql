@@ -1,4 +1,16 @@
-
+--
+-- DbServer:  n/a - general purpose script
+-- DbName:    n/a - general purpose script
+--
+-- Explanation:
+--    Approaches for reading CSV data from SQL.
+--      1) As a record set
+--      2) Into a variable
+-- 
+-- References:
+--  - https://blog.sqlauthority.com/2012/09/14/sql-server-grouping-by-multiple-columns-to-single-column-as-a-string/
+--  - http://www.sqlteam.com/article/using-coalesce-to-build-comma-delimited-string
+--
 
 CREATE TABLE #TestTable (ID INT, Col VARCHAR(4))
 GO
@@ -14,13 +26,10 @@ INSERT INTO #TestTable
 	     , ( 2, 'E' )
 GO
 
---SELECT *
---FROM #TestTable
---GO
-
 -- Get CSV values as a record set
 -- Inspired from https://blog.sqlauthority.com/2012/09/14/sql-server-grouping-by-multiple-columns-to-single-column-as-a-string/
 	SELECT 
+		'CSV Query:' 'CSV Query:',
 		t.ID, 
 		STUFF
 		(
@@ -49,9 +58,11 @@ select
 from
 	#TestTable t
 
-select 'CSV = ' + @csv
+select 'CSV Variable = ' + @csv
 
 
 -- Clean up
 DROP TABLE #TestTable
 GO
+
+
