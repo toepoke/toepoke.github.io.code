@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D30E0539-532B-4626-8559-F987D823760C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>_sql</RootNamespace>
+    <AssemblyName>_sql</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="OpenRowSet\My-Shopping-List.xlsx" />
+    <None Include="OpenRowSet\My_Shopping_List.csv" />
+    <None Include="SSIS\ReadCSVBySSIS\bin\Development\ReadCSVBySSIS.ispac" />
+    <None Include="SSIS\ReadCSVBySSIS\obj\Development\Package.dtsx" />
+    <None Include="SSIS\ReadCSVBySSIS\obj\Development\Project.params" />
+    <None Include="SSIS\ReadCSVBySSIS\obj\Development\ReadCSVBySSIS.dtproj" />
+    <None Include="SSIS\ReadCSVBySSIS\obj\Development\sql2014.Test.sa.conmgr" />
+    <None Include="SSIS\ReadCSVBySSIS\Package.dtsx" />
+    <None Include="SSIS\ReadCSVBySSIS\Project.params" />
+    <None Include="SSIS\ReadCSVBySSIS\ReadCSVBySSIS.database" />
+    <None Include="SSIS\ReadCSVBySSIS\ReadCSVBySSIS.dtproj" />
+    <None Include="SSIS\ReadCSVBySSIS\sql2014.Test.sa.conmgr" />
+    <None Include="SSIS\ReadCSVBySSIS\_My-Shopping-List.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="OpenRowSet\OpenRowSet - Read CSV File.sql" />
+    <Content Include="OpenRowSet\OpenRowSet - Read Excel File.sql" />
+    <Content Include="SSIS\ReadCSVBySSIS\obj\Development\BuildLog.xml" />
+    <Content Include="SSIS\ReadCSVBySSIS\ReadCSVBySSIS.dtproj.user" />
+    <Content Include="SSIS\ReadCSVBySSIS\ReadCSVBySSIS.sln" />
+    <Content Include="SSIS\ReadCSVBySSIS\_My-Shopping-List.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="review\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

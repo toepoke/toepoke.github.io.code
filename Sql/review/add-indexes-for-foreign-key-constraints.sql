@@ -14,6 +14,8 @@
 -- References:
 --  - https://stackoverflow.com/questions/10735407/sql-server-create-indexes-on-foreign-keys-where-necessary
 
+declare @CrLf varchar(2) = char(13) + char(10)
+
 SELECT
 	* 
 FROM 
@@ -21,13 +23,15 @@ FROM
 	SELECT TOP 99.99999999 PERCENT
 			f.name AS ForeignKeyName
 
+		, s.name ParentSchema
+
 		, s.name 
 				+ '.'
 				+ OBJECT_NAME(f.parent_object_id) 
 				+ '.'
 				+ COL_NAME(fc.parent_object_id, fc.parent_column_id) 
 			ParentTable
-
+						
 		, referencedSchema.name
 				+ '.'
 				+ OBJECT_NAME (f.referenced_object_id)
@@ -35,28 +39,50 @@ FROM
 				+ COL_NAME(fc.referenced_object_id, fc.referenced_column_id)
 			ReferencedTable
 
-		, 'CREATE INDEX [IX_' + f.name + ']'
-				+ ' ON ' 
-					+ '[' + referencedSchema.name + ']'
-					+ '.'
-					+ '[' + OBJECT_NAME(f.parent_object_id) + ']'
-					+ '(' 
-						+ COL_NAME(fc.parent_object_id, fc.parent_column_id) 
-					+ ')'
-			CreateIndexSql			
+		, 
+			'create nonclustered index [IX_' + replace(f.name,'FK_','') + ']'
+				+ ' on ' 
+				+ '[' + s.name + ']'
+				+ '.'
+				+ '[' + OBJECT_NAME(f.parent_object_id) + ']'
+				+ '(' 
+					+ COL_NAME(fc.parent_object_id, fc.parent_column_id)
+				+ ');' + @CrLf
+				+ 'go' + @CrLf
+			CreateIndexSql
 
+		, 
+			'drop index [IX_' + replace(f.name,'FK_','') + ']' 
+				+ ' on ' 
+				+ '[' + s.name + ']'
+				+ '.'
+				+ '[' + OBJECT_NAME(f.parent_object_id) + ']'
+				+ ';' + @CrLf
+				+ 'go' + @CrLf 
+			DropIndexSql
+			
 	FROM 
 		sys.foreign_keys AS f 
-		INNER JOIN sys.foreign_key_columns AS fc ON f.OBJECT_ID = fc.constraint_object_id
+		inner join sys.foreign_key_columns AS fc ON f.OBJECT_ID = fc.constraint_object_id
 		inner join sys.schemas s on f.schema_id = s.schema_id
 
 		inner join sys.tables referencedTable on f.referenced_object_id = referencedTable.object_id
 		inner join sys.schemas referencedSchema on referencedTable.schema_id = referencedSchema.schema_id
-	
+
 	ORDER BY
 		2, 3, 1	
 ) a
-where a.ParentTable not in (
-	-- Add any exclusions here so you can forget about them
-	  ''
-)
+where 
+	a.ParentTable not in 
+	(
+		-- Add any exclusions here so you can forget about them
+		  ''
+	) 
+	and a.ParentSchema not in 
+	(
+		-- Add any exclusions here so you can forget about them
+		-- ... (you may want to exclude any schema that holds your static data as the tables will be small)
+		  ''
+	)
+
+

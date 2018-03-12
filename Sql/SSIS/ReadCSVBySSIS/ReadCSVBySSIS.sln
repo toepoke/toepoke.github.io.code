@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "ReadCSVBySSIS", "ReadCSVBySSIS.dtproj", "{AF8178F2-02B7-4E66-B70B-8C6228D372BA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF8178F2-02B7-4E66-B70B-8C6228D372BA}.Development|Default.ActiveCfg = Development
+		{AF8178F2-02B7-4E66-B70B-8C6228D372BA}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CFCD6AF-3164-4454-9EE6-C5A4CEC964CC}
+	EndGlobalSection
+EndGlobal
