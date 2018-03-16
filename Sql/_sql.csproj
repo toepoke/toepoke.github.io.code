@@ -26,13 +26,18 @@
     <Content Include="Database Reviews\add-indexes-for-foreign-key-constraints.sql" />
     <Content Include="Database Reviews\ensure-entities-have-descriptions.sql" />
     <Content Include="Database Reviews\find-tables-without-primary-keys.sql" />
+    <Content Include="Performance\user-defined-functions-performance.sql" />
     <Content Include="SSIS\ReadCSVBySSIS\obj\Development\BuildLog.xml" />
     <Content Include="SSIS\ReadCSVBySSIS\ReadCSVBySSIS.dtproj.user" />
     <Content Include="SSIS\ReadCSVBySSIS\ReadCSVBySSIS.sln" />
     <Content Include="SSIS\ReadCSVBySSIS\_My-Shopping-List.png" />
+    <Content Include="Stubbs\CSV\csv-helpers.sql" />
+    <Content Include="Stubbs\CSV\query-to-csv.sql" />
+    <Content Include="Stubbs\Enums.sql" />
+    <Content Include="Stubbs\find-duplicate-data.sql" />
+    <Content Include="Stubbs\remove-trailing-zeros-from-text-fields.sql" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Profiling\" />
-    <Folder Include="Stubbs\CSV\" />
   </ItemGroup>
 </Project>
