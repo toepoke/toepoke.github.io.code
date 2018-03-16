@@ -3,11 +3,9 @@
 -- DbName:    n/a - general purpose script
 --
 -- Explanation:
---    An approach for finding duplicate items in a query.
---    Whilst one would ordinarily cheat with a "DISTINCT", sometimes you want to know what the duplicates are
+--    Script for removing trailing zeroes from a decimal number (i.e. for assessing a text field as a decimal)
 -- 
 -- References:
---  - https://www.databasejournal.com/features/mssql/article.php/10894_2222111_2/Padding-Rounding-Truncating-and-Removing-Trailing-Zeroes.htm
 --
 
 begin transaction
@@ -22,6 +20,8 @@ begin transaction
 	union all select '87.0000'
 	union all select '100.000000000000000000000000'
 	union all select '123.4599'
+	union all select '1023.98700'
+	union all select '1023.'
 
 	-- In essence the funky replace statement does this:
 	-- 1) Convert _all_ zeroes to spaces
@@ -31,8 +31,26 @@ begin transaction
 	-- 5) Trim the "." (now space) off 
 	-- 6) Convert spaces back to "." (i.e. if "." is at the end, it can be removed)
 
-	select replace(rtrim(replace(replace(rtrim(replace(data,'0',' '))
-					,' ','0'),'.',' ')),' ','.')
-			from #test
+	select 
+		replace
+		(
+			rtrim
+			(
+				replace
+				(
+					replace
+					(
+						rtrim
+						(
+							replace(data, '0', ' ')     -- [1] '1023.98700'  =>  '1 23.987  '
+						)                             -- [2] '1 23.987  '  =>  '1 23.987'
+						, ' ', '0'                    -- [3] '1 23.987'    =>  '1023.987'
+					)
+					, '.' ,' '                      -- [3] '1023.'  =>  '1023 '
+				)                                 -- [4] '1023.'  =>  '1023 '
+			)                                   -- [5] '1023 '  =>  '1023'
+			, ' ', '.'                          -- [6] '1023'   =>  '1023'
+		)
+	from #test
 
 rollback
