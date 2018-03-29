@@ -1,4 +1,4 @@
-﻿--
+--
 -- DbServer:  n/a - general purpose script
 -- DbName:    n/a - general purpose script
 --
@@ -37,28 +37,30 @@ FROM
 				+ OBJECT_NAME (f.referenced_object_id)
 				+ '.'
 				+ COL_NAME(fc.referenced_object_id, fc.referenced_column_id)
-			ReferencedTable
+			ReferenceColumn
 
 		, 
-			'create nonclustered index [IX_' + replace(f.name,'FK_','') + ']'
-				+ ' on ' 
+			'create nonclustered index ' + 
+				'[IX' + f.name + '__' + COL_NAME(fc.parent_object_id, fc.parent_column_id)  + ']'
+					+ ' on ' 
 				+ '[' + s.name + ']'
 				+ '.'
 				+ '[' + OBJECT_NAME(f.parent_object_id) + ']'
 				+ '(' 
 					+ COL_NAME(fc.parent_object_id, fc.parent_column_id)
 				+ ');' + @CrLf
-				+ 'go' + @CrLf
+			+ 'go' + @CrLf
 			CreateIndexSql
 
 		, 
-			'drop index [IX_' + replace(f.name,'FK_','') + ']' 
-				+ ' on ' 
+			'drop index ' + 
+				'[IX' + f.name + '__' + COL_NAME(fc.parent_object_id, fc.parent_column_id)  + ']'
+					+ ' on ' 
 				+ '[' + s.name + ']'
 				+ '.'
 				+ '[' + OBJECT_NAME(f.parent_object_id) + ']'
 				+ ';' + @CrLf
-				+ 'go' + @CrLf 
+			+ 'go' + @CrLf 
 			DropIndexSql
 			
 	FROM 
@@ -82,7 +84,6 @@ where
 	(
 		-- Add any exclusions here so you can forget about them
 		-- ... (you may want to exclude any schema that holds your static data as the tables will be small)
-		  ''
+		''
 	)
-
-
+	
