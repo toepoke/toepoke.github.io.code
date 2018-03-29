@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Snippets", "Snippets", "{2D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{8BF9ECA9-5E46-4520-8498-344B4A1EAB1C}"
 	ProjectSection(SolutionItems) = preProject
+		Snippets\CSharp\tipple-a-async.snippet = Snippets\CSharp\tipple-a-async.snippet
 		Snippets\CSharp\tipple-a.snippet = Snippets\CSharp\tipple-a.snippet
 	EndProjectSection
 EndProject

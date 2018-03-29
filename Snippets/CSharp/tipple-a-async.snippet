@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Quad A (async Tripple A)</Title>
+      <Shortcut>aaaa</Shortcut>
+      <Description>Code snippet for a test method with Arrange, Act, Assert placeholders (for an async test)</Description>
+      <Author>F.J.</Author>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Microsoft.VisualStudio.TestTools.UnitTesting</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>name</ID>
+          <ToolTip>Replace with the name of the test method</ToolTip>
+          <Default>A_Test_Method</Default>
+        </Literal>
+          <Literal Editable="false">
+            <ID>TestMethod</ID>
+            <Function>SimpleTypeName(global::Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod)</Function>
+          </Literal>
+      </Declarations>
+      <Code Language="CSharp"><![CDATA[[$TestMethod$]
+      public async Task $name$()
+      {
+		// Arrange
+				
+		// Act
+				
+		// Assert
+          $end$
+      }]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
+
