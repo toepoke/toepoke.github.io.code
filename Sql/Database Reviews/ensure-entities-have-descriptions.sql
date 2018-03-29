@@ -20,3 +20,4 @@ where
 
 	-- show items without a description
 	and props.[Extended Property] is null
+order by 1, 2, 3
