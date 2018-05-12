@@ -5,42 +5,6 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Tests", "c#\Unit.Tests\Unit.Tests.csproj", "{527DBF58-2681-4980-9EAA-43A3904EF011}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VBA", "VBA", "{07D6EDB1-BAFC-4BB3-980D-707C62886C29}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Outlook", "Outlook", "{641EEFCC-2B05-4D27-AE76-53BE5D0C923A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deferrer", "Deferrer", "{82E385CB-87E8-40E4-8283-C9ACF843E797}"
-	ProjectSection(SolutionItems) = preProject
-		VBA\Outlook\Deferrer\Deferrer.bas = VBA\Outlook\Deferrer\Deferrer.bas
-		VBA\Outlook\Deferrer\Deferrer_Tests.bas = VBA\Outlook\Deferrer\Deferrer_Tests.bas
-		VBA\Outlook\Deferrer\ThisOutlookSession.cls = VBA\Outlook\Deferrer\ThisOutlookSession.cls
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FolderHelper", "FolderHelper", "{16C5F9B6-5B20-468C-B49F-526A92628244}"
-	ProjectSection(SolutionItems) = preProject
-		VBA\Outlook\FolderHelper\FolderHelper.bas = VBA\Outlook\FolderHelper\FolderHelper.bas
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Snippets", "Snippets", "{2D3F1BDA-FF1A-452B-ADF0-E5B54DE37F3F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{8BF9ECA9-5E46-4520-8498-344B4A1EAB1C}"
-	ProjectSection(SolutionItems) = preProject
-		Snippets\CSharp\tipple-a-async.snippet = Snippets\CSharp\tipple-a-async.snippet
-		Snippets\CSharp\tipple-a.snippet = Snippets\CSharp\tipple-a.snippet
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cmd", "Cmd", "{D2C2BD45-F43D-4FF3-9CEC-F242E9E0F7FE}"
-	ProjectSection(SolutionItems) = preProject
-		Cmd\get-timestamp-filename.cmd = Cmd\get-timestamp-filename.cmd
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{9BDED2D4-4C13-440B-A3B4-D29BA6F2634E}"
-	ProjectSection(SolutionItems) = preProject
-		Snippets\SQL\tripple-a.snippet = Snippets\SQL\tripple-a.snippet
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_sql", "Sql\_sql.csproj", "{D30E0539-532B-4626-8559-F987D823760C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Custom|Any CPU = Custom|Any CPU
