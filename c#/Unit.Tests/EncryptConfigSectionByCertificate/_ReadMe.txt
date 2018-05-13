@@ -40,3 +40,6 @@ The following resources were helpful in building the approach:
 	Improved approach (verified certs only), encrypting the web.config
 	https://blogs.msdn.microsoft.com/rickrain/2012/02/27/using-a-server-certificate-to-protect-web-config/
 
+	Publish profiles for Azure
+	https://blogs.msdn.microsoft.com/benjaminperkins/2017/01/09/cannot-publish-to-soveriegn-cloud/
+
