@@ -42,6 +42,11 @@ function extractBookmarkComment(infoEle) {
 	var preamblePos = info.indexOf(" - ");
 	if (preamblePos > 0) {
 		info = info.substring(preamblePos + " - ".length);
+
+		// GB also adds a trailing "]"
+		if (info.substring(info.length - 1) == "]") {
+			info = info.substring(0, info.length - 1);
+		}
 	} else {
 		// GB will just include the tags, which we aren't interested in
 		info = "";
@@ -79,9 +84,9 @@ function markdownify(hits) {
 		var href = escapeMarkdownString(hit.href);
 		var info = escapeMarkdownString(hit.info);
 
-	// copy all links into markdown format
+		// copy all links into markdown format
 		markdown += `* [${text}](${href})`;
-	// add notes if there are any
+		// add notes if there are any
 		if (info && info !== "") {
 			markdown += `* - ${info}*`;
 		}
