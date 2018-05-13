@@ -44,6 +44,16 @@ function extractBookmarkComment(infoEle) {
 	return info;
 }
 
+// If the given text has a "|" in it, markdown will see this as a table cell declaration
+// ... so escape that out
+function escapeMarkdownString(md) {
+	if (!md || md === "") {
+		return "";
+	}
+
+	return md.replace("|", "&#124;");
+}
+
 // Loop over all links and identify which links are actually bookmark links!
 for (var link of links) {
 	var id = link.getAttribute("id");
@@ -68,9 +78,9 @@ for (var link of links) {
 			hit.info = extractBookmarkComment(infoEles[0]);
 		}
 
-		// and finally, if the info has a | in it, markdown will see this as a table cell declaration
-		// ... so escape that out
-		hit.text = hit.text.replace("|", "&#124;");
+		hit.text = escapeMarkdownString(hit.text);
+		hit.info = escapeMarkdownString(hit.info);
+		hit.href = escapeMarkdownString(hit.href);
 
 		hits.push(hit);
 	} // if bookmark link
