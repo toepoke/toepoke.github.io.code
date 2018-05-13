@@ -88,7 +88,7 @@ function markdownify(hits) {
 		markdown += `* [${text}](${href})`;
 		// add notes if there are any
 		if (info && info !== "") {
-			markdown += `* - ${info}*`;
+			markdown += `- *${info}*`;
 		}
 		markdown += "\n";
 	}
