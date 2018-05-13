@@ -3,6 +3,11 @@
 /// as a set of markdown ready for pasting.
 /// 
 
+
+// 
+// GB adds additional data to the URL, like redirects and analytics.  
+// We don't want these present, so strip them off
+// 
 function tidyTargetLink(href) {
 	if (!href) {
 		return "";
@@ -17,15 +22,22 @@ function tidyTargetLink(href) {
 	}
 
 	return href;
-}
+} // tidyTargetLink
 
+
+// 
+// The comment field on the page includes tag information (e.g. "[tag1,tag2,tag3]") which is of no
+// use to our readers.
+// 
 function extractBookmarkComment(infoEle) {
 	var info = "";
 	if (!infoEle) {
 		return info;
 	}
+
 	// GB adds a summary of the tags before out comment, so skip that part out
 	info = infoEle.textContent;
+
 	// GB also adds some preamble, so we'll remove that too
 	var preamblePos = info.indexOf(" - ");
 	if (preamblePos > 0) {
@@ -36,18 +48,29 @@ function extractBookmarkComment(infoEle) {
 	}
 
 	return info;
-}
+} // extractBookmarkComment
 
+
+// 
 // If the given text has a "|" in it, markdown will see this as a table cell declaration
 // ... so escape that out
+// 
 function escapeMarkdownString(md) {
 	if (!md || md === "") {
 		return "";
 	}
 
 	return md.replace("|", "&#124;");
-}
 
+} // escapeMarkdownString
+
+
+
+// 
+// We publish the elevenses articles in markdown format.  To make our lives easier we build up
+// all the links into markdown format so we just paste that into our article ready for breaking into 
+// appropriate sections.
+// 
 function markdownify(hits) {
 	var markdown = "";
 
@@ -66,15 +89,20 @@ function markdownify(hits) {
 	}
 
 	return markdown;
-}
 
+} // markdownify
+
+
+
+// 
+// Main routine to grab the links and rearrange them so they're usable for our articles.
+// 
 function main() {
 	var search = document.getElementById("search");
 	var hits = [];
 
 	// Find all hyperlinks to start with
 	var links = search.querySelectorAll("a");
-
 
 	// Loop over all links and identify which links are actually bookmark links!
 	for (var link of links) {
@@ -90,10 +118,10 @@ function main() {
 				link: link
 			};
 
+			// remove addition stuff GB adds (e.g. they use a redirect)
 			hit.href = tidyTargetLink(hit.href);
 
 			// we may have addition notes to the link we want including
-			// link.parentElement.parentElement.parentElement.querySelectorAll("td span#bkmk_info_0")[0].innerText
 			var infoId = id.replace("_href_", "_info_");
 			var infoEles = link.parentElement.parentElement.parentElement.querySelectorAll("td span#" + infoId);
 			if (infoEles && infoEles.length > 0) {
@@ -107,6 +135,8 @@ function main() {
 
 	return hits;
 } // main
+
+
 
 var hits = main();
 var markdown = markdownify(hits);
