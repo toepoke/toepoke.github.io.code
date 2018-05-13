@@ -9,6 +9,22 @@ var hits = [];
 // Find all hyperlinks to start with
 var links = search.querySelectorAll("a");
 
+function tidyTargetLink(href) {
+	if (!href) {
+		return "";
+	}
+	// google bookmarks adds a redirect ... we don't want that!
+	href = href.replace("https://www.google.com/url?q=", "");
+
+	// google also adds a suffix which means we get 404 all over the place!, so get rid of that!
+	var pos = href.indexOf("&usd");
+	if (pos > 0) {
+		href = href.substring(0, pos);
+	}
+
+	return href;
+}
+
 // Loop over all links and identify which links are actually bookmark links!
 for (var link of links) {
 	var id = link.getAttribute("id");
@@ -23,14 +39,7 @@ for (var link of links) {
 			link: link
 		};
 
-		// google bookmarks adds a redirect ... we don't want that!
-		hit.href = hit.href.replace("https://www.google.com/url?q=", "");
-
-		// google also adds a suffix which means we get 404 all over the place!, so get rid of that!
-		var pos = hit.href.indexOf("&usd");
-		if (pos > 0) {
-			hit.href = hit.href.substring(0, pos);
-		}
+		hit.href = tidyTargetLink(hit.href);
 
 		// we may have addition notes to the link we want including
 		// link.parentElement.parentElement.parentElement.querySelectorAll("td span#bkmk_info_0")[0].innerText
@@ -59,9 +68,9 @@ for (var link of links) {
 
 	var markdown = "";
 	for (var hit of hits) {
-// copy all links into markdown format
+		// copy all links into markdown format
 		markdown += `* [${hit.text}](${hit.href})`;
-// add notes if there are any
+		// add notes if there are any
 		if (hit.info && hit.info !== "") {
 			markdown += `* - ${hit.info}*`;
 		}
