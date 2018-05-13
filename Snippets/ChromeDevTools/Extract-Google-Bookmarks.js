@@ -25,6 +25,25 @@ function tidyTargetLink(href) {
 	return href;
 }
 
+function extractBookmarkComment(infoEle) {
+	var info = "";
+	if (!infoEle) {
+		return info;
+	}
+	// GB adds a summary of the tags before out comment, so skip that part out
+	info = infoEle.textContent;
+	// GB also adds some preamble, so we'll remove that too
+	var preamblePos = info.indexOf(" - ");
+	if (preamblePos > 0) {
+		info = info.substring(preamblePos + " - ".length);
+	} else {
+		// GB will just include the tags, which we aren't interested in
+		info = "";
+	}
+
+	return info;
+}
+
 // Loop over all links and identify which links are actually bookmark links!
 for (var link of links) {
 	var id = link.getAttribute("id");
@@ -46,17 +65,7 @@ for (var link of links) {
 		var infoId = id.replace("_href_", "_info_");
 		var infoEles = link.parentElement.parentElement.parentElement.querySelectorAll("td span#" + infoId);
 		if (infoEles && infoEles.length > 0) {
-			var infoEle = infoEles[0];
-			// GB adds a summary of the tags before out comment, so skip that part out
-			hit.info = infoEle.textContent;
-			// GB also adds some preamble, so we'll remove that too
-			var preamblePos = hit.info.indexOf(" - ");
-			if (preamblePos > 0) {
-				hit.info = hit.info.substring(preamblePos + " - ".length);
-			} else {
-				// GB will just include the tags, which we aren't interested in
-				hit.info = "";
-			}
+			hit.info = extractBookmarkComment(infoEles[0]);
 		}
 
 		// and finally, if the info has a | in it, markdown will see this as a table cell declaration
@@ -68,9 +77,9 @@ for (var link of links) {
 
 	var markdown = "";
 	for (var hit of hits) {
-		// copy all links into markdown format
+// copy all links into markdown format
 		markdown += `* [${hit.text}](${hit.href})`;
-		// add notes if there are any
+// add notes if there are any
 		if (hit.info && hit.info !== "") {
 			markdown += `* - ${hit.info}*`;
 		}
