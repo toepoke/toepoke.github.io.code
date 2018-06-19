@@ -41,5 +41,5 @@ Icon
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
-/c#/Unit.Tests/bin/Debug
+/c#/Unit.Tests/bin/
 /.vs/*.*
