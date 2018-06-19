@@ -7,36 +7,17 @@
       </SnippetTypes>
       <Title>Tripple A</Title>
       <Shortcut>aaa</Shortcut>
-      <Description>Code snippet for a test method with Arrange, Act, Assert placeholders</Description>
+      <Description>Code snippet for a inserting just the Arrange/Act/Assert placeholders</Description>
       <Author>F.J.</Author>
     </Header>
     <Snippet>
-      <Imports>
-        <Import>
-          <Namespace>Microsoft.VisualStudio.TestTools.UnitTesting</Namespace>
-        </Import>
-      </Imports>
-      <Declarations>
-        <Literal>
-          <ID>name</ID>
-          <ToolTip>Replace with the name of the test method</ToolTip>
-          <Default>A_Test_Method</Default>
-        </Literal>
-          <Literal Editable="false">
-            <ID>TestMethod</ID>
-            <Function>SimpleTypeName(global::Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod)</Function>
-          </Literal>
-      </Declarations>
-      <Code Language="CSharp"><![CDATA[[$TestMethod$]
-      public void $name$()
-      {
+      <Code Language="CSharp"><![CDATA[
 		// Arrange
 				
 		// Act
 				
 		// Assert
-          $end$
-      }]]></Code>
+      ]]></Code>
     </Snippet>
   </CodeSnippet>
 </CodeSnippets>
