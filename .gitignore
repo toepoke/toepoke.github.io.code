@@ -17,6 +17,7 @@ $RECYCLE.BIN/
 # intermediate files
 obj/
 bin/Debug/
+packages
 
 # Test output
 TestResults/
