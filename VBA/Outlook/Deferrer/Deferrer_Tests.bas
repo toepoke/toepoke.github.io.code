@@ -27,48 +27,48 @@ Public Sub RunTests()
 	RunTest 6, "12-MAY-2015 14:20", "::in 2 months"
 
 	' ":: at X"
-	RunTest 7, "12-MAR-2015 22:30", "::at 22:30"
-	RunTest 8, "12-MAR-2015 22:30", "::at 10:30pm"
-	RunTest 9, "13-MAR-2015 10:00", "::at 10:00", "10am has passed today, should fall over to tomorrow"
-	RunTest 10, "13-MAR-2015 10:00", "::at 10am", "10am has passed today, should fall over to tomorrow"
+	RunTest 10, "12-MAR-2015 22:30", "::at 22:30"
+	RunTest 11, "12-MAR-2015 22:30", "::at 10:30pm"
+	RunTest 12, "13-MAR-2015 10:00", "::at 10:00", "10am has passed today, should fall over to tomorrow"
+	RunTest 13, "13-MAR-2015 10:00", "::at 10am", "10am has passed today, should fall over to tomorrow"
 
 	' "::on 23/3/15 at 14:00"
-	RunTest 11, "19-MAR-2015 15:15", "::on 19-MAR-2015 at 15:15"
-	RunTest 12, "19-MAR-2015 15:15", "::on 19-MAR-2015 at 3:15pm"
-	RunTest 13, "01-JAN-1900", "::on 19-MAR-2000 at 3:15pm", "Should raise error as 'on' date is in the past"
+	RunTest 21, "19-MAR-2015 15:15", "::on 19-MAR-2015 at 15:15"
+	RunTest 22, "19-MAR-2015 15:15", "::on 19-MAR-2015 at 3:15pm"
+	RunTest 23, "01-JAN-1900", "::on 19-MAR-2000 at 3:15pm", "Should raise error as 'on' date is in the past"
 
 	' ":: on X-day at 2pm"
-	RunTest 14, "12-MAR-2015 14:00", "::on Today at 2pm", "Should be today as we asked for today"
-	RunTest 15, "13-MAR-2015 14:00", "::on Tomorrow at 2pm", "Should be the Friday, as Tomorrow is Friday"
-	RunTest 16, "13-MAR-2015 14:00", "::on Friday at 2pm", "Should be Friday as well as Tomorrow"
-	RunTest 17, "19-MAR-2015 14:00", "::on Thursday at 2pm", "Should be next week as we start from today, but ask for Thursday"
+	RunTest 30, "12-MAR-2015 14:00", "::on Today at 2pm", "Should be today as we asked for today"
+	RunTest 31, "13-MAR-2015 14:00", "::on Tomorrow at 2pm", "Should be the Friday, as Tomorrow is Friday"
+	RunTest 33, "13-MAR-2015 14:00", "::on Friday at 2pm", "Should be Friday as well as Tomorrow"
+	RunTest 34, "19-MAR-2015 14:00", "::on Thursday at 2pm", "Should be next week as we start from today, but ask for Thursday"
 
 	' LONG VERSION: Full week check (we've done Friday above, we only do one week ahead)
-	RunTest 18, "14-MAR-2015 14:00", "::on Sat at 2pm"
-	RunTest 19, "15-MAR-2015 14:00", "::on Sun at 2pm"
-	RunTest 20, "16-MAR-2015 14:00", "::on Mon at 2pm"
-	RunTest 21, "17-MAR-2015 14:00", "::on Tue at 2pm"
-	RunTest 22, "18-MAR-2015 14:00", "::on Wed at 2pm"
-	RunTest 23, "19-MAR-2015 14:00", "::on Thu at 2pm"
+	RunTest 40, "14-MAR-2015 14:00", "::on Sat at 2pm"
+	RunTest 41, "15-MAR-2015 14:00", "::on Sun at 2pm"
+	RunTest 42, "16-MAR-2015 14:00", "::on Mon at 2pm"
+	RunTest 43, "17-MAR-2015 14:00", "::on Tue at 2pm"
+	RunTest 44, "18-MAR-2015 14:00", "::on Wed at 2pm"
+	RunTest 45, "19-MAR-2015 14:00", "::on Thu at 2pm"
 
 	' SHORT VERSION: Full week check (we've done Friday above, we only do one week ahead)
-	RunTest 24, "14-MAR-2015 14:00", "::Sat at 2pm"
-	RunTest 25, "15-MAR-2015 14:00", "::Sun at 2pm"
-	RunTest 26, "16-MAR-2015 14:00", "::Mon at 2pm"
-	RunTest 27, "17-MAR-2015 14:00", "::Tue at 2pm"
-	RunTest 28, "18-MAR-2015 14:00", "::Wed at 2pm"
-	RunTest 29, "19-MAR-2015 14:00", "::Thu at 2pm"
+	RunTest 50, "14-MAR-2015 14:00", "::Sat at 2pm"
+	RunTest 51, "15-MAR-2015 14:00", "::Sun at 2pm"
+	RunTest 52, "16-MAR-2015 14:00", "::Mon at 2pm"
+	RunTest 53, "17-MAR-2015 14:00", "::Tue at 2pm"
+	RunTest 54, "18-MAR-2015 14:00", "::Wed at 2pm"
+	RunTest 55, "19-MAR-2015 14:00", "::Thu at 2pm"
 
 	' Today/Tomorrow but without "on" prefix
-	RunTest 30, "12-MAR-2015 14:00", "::Today at 2pm"
-	RunTest 31, "13-MAR-2015 14:30", "::Tomorrow at 2:30pm"
+	RunTest 60, "12-MAR-2015 14:00", "::Today at 2pm"
+	RunTest 61, "13-MAR-2015 14:30", "::Tomorrow at 2:30pm"
 	' Test short version
-	RunTest 32, "12-MAR-2015 14:00", "::Tod at 2pm"
-	RunTest 33, "13-MAR-2015 14:30", "::Tom at 2:30pm"
-	RunTest 34, "13-MAR-2015 14:20", "::Tomorrow"
+	RunTest 70, "12-MAR-2015 14:00", "::Tod at 2pm"
+	RunTest 71, "13-MAR-2015 14:30", "::Tom at 2:30pm"
+	RunTest 72, "13-MAR-2015 14:20", "::Tomorrow"
 
 	' BUG: "on DD-MON-YYYY" doesn't send based on the current time
-	RunTest 35, "07-APR-2015 14:20", ":: on 07-APR-2015"
+	RunTest 100, "07-APR-2015 14:20", ":: on 07-APR-2015"
 
 End Sub
 
