@@ -4,7 +4,7 @@ Setlocal EnableDelayedExpansion
 set DEBUG=0
 set DB_SERVER_UNDER_TEST=
 set DB_UNDER_TEST=
-set REMOVE_TSQLT=1
+set REMOVE_TSQLT=0
 set SQLCMD=%ProgramW6432%\Microsoft SQL Server\100\Tools\Binn\SQLCMD.EXE
 set INSTALL=S:\Dropbox\Git\repo\toepoke.github.io.code\Sql\tSQLt
 set InError=0
@@ -16,7 +16,7 @@ set InError=0
 	if /I "%1"=="-h"  goto SHOW_SYNTAX
 	if not "%1"=="" set DB_SERVER_UNDER_TEST=%1
 	if not "%2"=="" set DB_UNDER_TEST=%2
-	if not "%3"=="" set REMOVE_TSQLT=0
+	if not "%3"=="" set REMOVE_TSQLT=1
 
 :RUN_CHECK
 	:: Ensure environment variables are set in the file, or overriden by the command-line
@@ -73,7 +73,7 @@ set InError=0
 
 :UNINSTALL_TSQLT
 	if %DEBUG%==1 @echo UNINSTALL_TSQLT::START
-	if ("%REMOVE_TSQLT%"=="1") (
+	if "%REMOVE_TSQLT%"=="1" (
 		@echo UNINSTALL_TSQLT
 		copy /Y "%INSTALL%\tSQLt Uninstall\*.sql" %TEMP%\_tSQLt.uninstall.sql
 		call :EXECUTE_SQL_SCRIPT %TEMP%\_tSQLt.uninstall.sql
