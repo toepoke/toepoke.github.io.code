@@ -16,7 +16,7 @@ set InError=0
 	if /I "%1"=="-h"  goto SHOW_SYNTAX
 	if not "%1"=="" set DB_SERVER_UNDER_TEST=%1
 	if not "%2"=="" set DB_UNDER_TEST=%2
-	if not "%3"=="" set REMOVE_TSQLT=1
+	if not "%3"=="" set REMOVE_TSQLT=%3
 
 :RUN_CHECK
 	:: Ensure environment variables are set in the file, or overriden by the command-line
@@ -97,7 +97,8 @@ set InError=0
 	echo.
 	echo   %%1  :  Database server under test
 	echo   %%2  :  Database name/catalogue under test
-	echo   %%3  :  if "1" tSQLt is uninstalled after running tests, otherwise it remains installed
+	echo   %%3  :  if "1" tSQLt is uninstalled after running tests
+	echo       :  if "0" tSQLt remains installed
 	exit /b 1
 	goto :eof
 
