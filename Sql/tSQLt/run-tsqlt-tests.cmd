@@ -2,8 +2,8 @@
 
 Setlocal EnableDelayedExpansion
 set DEBUG=0
-set DB_SERVER_UNDER_TEST=.\sql2008
-set DB_UNDER_TEST=leapoflogic_single
+set DB_SERVER_UNDER_TEST=
+set DB_UNDER_TEST=
 set REMOVE_TSQLT=1
 set SQLCMD=%ProgramW6432%\Microsoft SQL Server\100\Tools\Binn\SQLCMD.EXE
 set INSTALL=S:\Dropbox\Git\repo\toepoke.github.io.code\Sql\tSQLt
@@ -12,6 +12,8 @@ set InError=0
 :PARSE_PARMS
 	:: Environment variables may be set for a specific project in which case 
 	:: we don't need to use the command-line parameters.
+	if /I "%1"=="/h"  goto SHOW_SYNTAX
+	if /I "%1"=="-h"  goto SHOW_SYNTAX
 	if not "%1"=="" set DB_SERVER_UNDER_TEST=%1
 	if not "%2"=="" set DB_UNDER_TEST=%2
 	if not "%3"=="" set REMOVE_TSQLT=0
@@ -38,14 +40,14 @@ set InError=0
 		
 :RUN_ALL_SQL_TESTS
 	if %DEBUG%==1 @echo RUN_ALL_SQL_TESTS::START
-	set TestFound=0
 	for /F %%n in ('dir /s/b *.Tests.sql') do (
-		set TestFound=1
+		set /a TotalTests=!TotalTests!+1
 		@echo Running "%%n" ...
 		if "%InError%"=="0" call :EXECUTE_SQL_SCRIPT %%n
 		if ERRORLEVEL 1 call :TEST_FAILED %%n & goto SCRIPT_END
 	)
-	if %TestFound%==0 call :TEST_FAILED "No tests found :-(" & goto SCRIPT_END
+	if %TotalTests%==0 call :TEST_FAILED "No tests found :-(" & goto SCRIPT_END
+	if not %TotalTests%==0 echo Executed "%TotalTests%" test files ...
 	if %DEBUG%==1 @echo RUN_ALL_SQL_TESTS::FINISH
 	goto SCRIPT_END
 
@@ -82,16 +84,20 @@ set InError=0
 	if %DEBUG%==1 @echo CLEAN_UP::START
 	if exist %TEMP%\_tSQLt.install.sql          del /q %TEMP%\_tSQLt.install.sql
 	if exist %TEMP%\_tSQLt.test.execution.txt   del /q %TEMP%\_tSQLt.test.execution.txt
-	if exist %TEMP%\_tSQLt.install.sql		    del /q %TEMP%\_tSQLt.install.sql	
+	if exist %TEMP%\_tSQLt.install.sql          del /q %TEMP%\_tSQLt.install.sql	
 	if exist %TEMP%\_tSQLt.uninstall.sql        del /q %TEMP%\_tSQLt.uninstall.sql
 	if %DEBUG%==1 @echo CLEAN_UP::FINISH
 	goto VERY_END
 	
 :SHOW_HELP
-	echo Run-tSQLt-Tests:
+	echo ERROR: %1
+:SHOW_SYNTAX
 	echo.
-	if not "%1"=="" echo ERROR: %1
-	echo ERROR: '%1'
+	echo Run-tSQLt-Tests Usage:
+	echo.
+	echo   %%1  :  Database server under test
+	echo   %%2  :  Database name/catalogue under test
+	echo   %%3  :  if "1" tSQLt is uninstalled after running tests, otherwise it remains installed
 	exit /b 1
 	goto :eof
 
