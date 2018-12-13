@@ -46,13 +46,14 @@ begin transaction
 	-- IMEX=1   Tells the driver to treat everything as text, however see notes above on this.
 
 	begin try
+		Print 'READ ********************'
 		select *
 		into MyShoppingList
 		from OpenRowSet(
 			'Microsoft.ACE.OLEDB.12.0', 
 			'Excel 12.0; HDR=YES; IMEX=1;
-				Database={EXCEL_FILE_PATH}\My-Shopping-List.xlsx', 
-			'SELECT * FROM [Sheet1$]'
+				Database={DIRECTORY}\My-Shopping-List.xlsx', 
+			'SELECT * FROM [SheetRead$]'
 		)
 
 		select * from MyShoppingList
@@ -67,8 +68,20 @@ begin transaction
 		drop table MyShoppingList
 	end try
 	begin catch
+		Print ERROR_NUMBER()
+		Print ERROR_MESSAGE()
 		Print 'Ensure you''ve changed the {DIRECTORY} in the path, and you don''t have the file already open in Excel'
 	end catch
 
 rollback
+
+
+	Print 'WRITE ********************'
+	insert into OpenRowSet(
+		'Microsoft.ACE.OLEDB.12.0', 
+		'Excel 12.0;Database={DIRECTORY}\My-Shopping-List.xlsx', 
+		'SELECT * FROM [SheetWrite$]'
+	)
+	select 4 Id, 'Food' Category, 'Biscuits' BasketItem
+
 
