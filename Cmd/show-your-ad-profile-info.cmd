@@ -1,6 +1,11 @@
 @echo off
 cls
+::net users %USERNAME% /domain
+::pause
 
-net users %USERNAME% /domain
+:: Powershell gives a better output:
+set UNAME=%USERNAME%
+set /p UNAME=[Enter username (or empty for %USERNAME%)]
 
-pause
+powershell -Command "& {(New-Object System.DirectoryServices.DirectorySearcher('(&(objectCategory=User)(samAccountName=%UNAME%))')).FindOne().GetDirectoryEntry().memberOf}"
+
