@@ -1,7 +1,3 @@
-
-exec tSQLt.NewTestClass 'tSQLt_Helpers';
-go
-
 exec tSQLt.NewTestClass 'tSQLt_Helpers';
 go
 
