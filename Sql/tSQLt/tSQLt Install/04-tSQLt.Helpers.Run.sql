@@ -2,6 +2,9 @@
 exec tSQLt.NewTestClass 'tSQLt_Helpers';
 go
 
+exec tSQLt.NewTestClass 'tSQLt_Helpers';
+go
+
 create function [tSQLt_Helpers].IsInStudio()
 returns bit
 begin
@@ -42,9 +45,22 @@ begin
 	--
 	declare @DEBUG bit = 0;
 
+	-- I've found I've developed a habit of checking in the number of the last test I've been running, like:
+	--   exec tSQLt_Helpers.Run 'SomeSchema', 49;
+	-- Which means when the CI environment kicks in at least 48 tests don't get executed!
+	-- Not a good place to be.
+	-- So if we're running outside Management Studio, and there's a specific test number in 
+	-- place, raise an error to force a CI environment to fail so we can fix the issue
+	if tSQLt_Helpers.IsInStudio() = 0 and @testNum is not null
+	begin
+		if @DEBUG = 1 Print 'TEST RUNNER: RunAll(IsInStudio)';
+		raiserror ('ERROR: Should not execute specific tests ("%d") in CI environment.', 16, 1, @testNum);
+		return 0;
+	end
+
 	if @testSchema is null and @testNum is null
 	begin
-		if @DEBUG = 1 Print 'TEST RUNNER: RunAll ';
+		if @DEBUG = 1 Print 'TEST RUNNER: RunAll(no-parameters)';
 		exec tSQLt.RunAll
 		return 0;
 	end
@@ -113,6 +129,7 @@ end
 go
 
 
+
 -- Unit tests used for testing the runner
 exec tSQLt.NewTestClass 'Numerical_Runner_Tests';
 go
@@ -158,9 +175,24 @@ go
 exec tSQLt.NewTestClass 'tSQLt_Helpers_Tests_Run_Tests';
 go
 
+create function [tSQLt_Helpers_Tests_Run_Tests].Fake_ForceIsInStudio_Off()
+returns bit
+begin
+	return 0;
+end
+go
+
+ create function [tSQLt_Helpers_Tests_Run_Tests].Fake_ForceIsInStudio_On()
+returns bit
+begin
+	return 1;
+end
+go
+
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with no parameters RunAll is also called with no parameters]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 	
 	exec tSQLt_Helpers.Run null, null;
@@ -175,6 +207,7 @@ go
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with schema parameters RunAll is also called schema parameters]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', null;
@@ -189,6 +222,7 @@ go
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with "1", test "#01" is executed]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 	
@@ -204,6 +238,7 @@ go
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with "11", test "11" is executed]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 	
@@ -219,6 +254,7 @@ go
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with "2", multiple tests error is raised]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 
@@ -231,6 +267,7 @@ go
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with a non-existent test number, an error is generated]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 
@@ -240,6 +277,24 @@ begin
 end
 go
 
+create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with a test number, but outside Management Studio, all tests are still executed]
+as
+begin
+	declare @totalExecutedTests int = null;
+
+	-- Arrange
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_Off';
+	exec tSQLt.ExpectException 'ERROR: Should not execute specific tests ("1") in CI environment.';
+	exec tSQLt.SpyProcedure 'tSQLt.Run';
+	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
+	
+	-- Act
+	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 1;
+
+	-- Assert
+	-- ExpectException
+end
+go
 
 exec tSQLt.Run '[tSQLt_Helpers_Tests_Run_Tests]';
 go
@@ -250,5 +305,4 @@ go
 
 exec tSQLt.DropClass 'tSQLt_Helpers_Tests_Run_Tests';
 go
-
 
