@@ -42,23 +42,10 @@ begin
 	--
 	declare @DEBUG bit = 0;
 
-	-- I've found I've developed a habit of checking in the number of the last test I've been running, like:
-	--   exec tSQLt_Helpers.Run 'SomeSchema', 49;
-	-- Which means when the CI environment kicks in at least 48 tests don't get executed!
-	-- Not a good place to be.
-	-- So if we're running outside Management Studio, and there's a specific test number in 
-	-- place, raise an error to force a CI environment to fail so we can fix the issue
-	if tSQLt_Helpers.IsInStudio() = 0 and @testNum is not null
-	begin
-		if @DEBUG = 1 Print 'TEST RUNNER: RunAll(IsInStudio)';
-		raiserror ('ERROR: Should not execute specific tests ("%d") in CI environment.', 16, 1, @testNum);
-		return 0;
-	end
-
 	if @testSchema is null and @testNum is null
 	begin
-		if @DEBUG = 1 Print 'TEST RUNNER: RunAll(no-parameters)';
-		exec tSQLt.RunAll;
+		if @DEBUG = 1 Print 'TEST RUNNER: RunAll ';
+		exec tSQLt.RunAll
 		return 0;
 	end
 	if @testSchema is not null and @testNum is null
@@ -69,20 +56,36 @@ begin
 	end
 
 	declare @foundTestName nvarchar(512) = null;
-	declare @testNumString nvarchar(512) = convert(nvarchar(10), @testNum);
 	declare @numTestsFound int = null;
 
-	-- Are there multiple tests with the same test number?
-	select @numTestsFound = count(1)
-	from   INFORMATION_SCHEMA.ROUTINES procs
-	where  procs.ROUTINE_SCHEMA = @testSchema
-	and
+	-- Find all matches for the given test number ...
+	select *
+	into #hits
+	from
 	(
-	     ROUTINE_NAME like 'Test #' + @testNumString + ')%'
-		or ROUTINE_NAME like 'Test #%0' + @testNumString + ')%'
-		or ROUTINE_NAME like 'Test #%00' + @testNumString + ')%'
-		or ROUTINE_NAME like 'Test #%000' + @testNumString + ')%'
-	)
+		select 
+			convert(int, SubString(ROUTINE_NAME, TestNumStart, (TestNumEnd - TestNumStart))) TestNumFound
+			, ROUTINE_NAME
+		from 
+		(
+			select 
+				@testNum FindTestNumber
+				, PATINDEX('Test #%', ROUTINE_NAME) + Len('Test #') TestNumStart
+				,	PATINDEX('%)%', ROUTINE_NAME) TestNumEnd
+				, ROUTINE_NAME
+			from   INFORMATION_SCHEMA.ROUTINES procs
+			where  procs.ROUTINE_SCHEMA = @testSchema
+				 and procs.ROUTINE_NAME like 'Test #%) %'
+		) testNumMatches
+		where 
+			TestNumStart >= 0 and TestNumEnd > TestNumStart
+	) hits
+	where TestNumFound = @testNum
+
+	-- Should only find one test number
+	-- ... if there's more than one we chuck an error as having two test "1"s makes no sense!
+	select @numTestsFound = count(1) 
+	from #hits
 
 	if @numTestsFound > 1
 	begin
@@ -95,25 +98,12 @@ begin
 		return 2;
 	end
 
-	-- Look for an exact match
+	-- If we get here we've found a single test number to run, so 
+	-- find the full name of the test so we can execute it through tSQLt
 	select top 1 @foundTestName = ROUTINE_NAME
-	from   INFORMATION_SCHEMA.ROUTINES procs
-	where  procs.ROUTINE_SCHEMA = @testSchema
-	and    ROUTINE_NAME like 'Test #' + @testNumString + ')%';
-
-	if @foundTestName is null
-	begin
-		-- No exact match, so find any tests with a zero prefix
-		select top 1 @foundTestName = ROUTINE_NAME
-		from   INFORMATION_SCHEMA.ROUTINES procs
-		where  procs.ROUTINE_SCHEMA = @testSchema
-		and 
-		(
-				 ROUTINE_NAME like 'Test #%0' + @testNumString + ')%'
-			or ROUTINE_NAME like 'Test #%00' + @testNumString + ')%'
-			or ROUTINE_NAME like 'Test #%000' + @testNumString + ')%'
-		)
-	end
+	from #hits
+	
+	drop table #hits
 
 	-- Execute the found test
 	declare @testRunner nvarchar(512) = QuoteName(@testSchema) + '.' + QuoteName(@foundTestName);
@@ -168,21 +158,6 @@ go
 exec tSQLt.NewTestClass 'tSQLt_Helpers_Tests_Run_Tests';
 go
 
-create function [tSQLt_Helpers_Tests_Run_Tests].Fake_ForceIsInStudio_Off()
-returns bit
-begin
-	return 0;
-end
-go
-
-create function [tSQLt_Helpers_Tests_Run_Tests].Fake_ForceIsInStudio_On()
-returns bit
-begin
-	return 1;
-end
-go
-
-
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with no parameters RunAll is also called with no parameters]
 as
 begin
@@ -216,9 +191,7 @@ as
 begin
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
-
-	-- We're actually testing this function, so we don't want it erroring because we have a specific test number :)	
-	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
+	
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 1;
 
 	if not exists(select 1 from tSQLt.Run_SpyProcedureLog where TestName = '[Numerical_Runner_Tests].[Test #01) - test 01]')
@@ -234,8 +207,6 @@ begin
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 	
-	-- We're actually testing this function, so we don't want it erroring because we have a specific test number :)	
-	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 11;
 
 	if not exists(select 1 from tSQLt.Run_SpyProcedureLog where TestName = '[Numerical_Runner_Tests].[Test #011) - test 011]')
@@ -251,8 +222,6 @@ begin
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 
-	-- We're actually testing this function, so we don't want it erroring because we have a specific test number :)	
-	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.ExpectException 'Multiple tests with id "2" were found.';
 	
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 2;
@@ -265,40 +234,21 @@ begin
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 
-	-- We're actually testing this function, so we don't want it erroring because we have a specific test number :)	
-	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.ExpectException 'Could not find test number 1234567890.';
 	
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 1234567890;
 end
 go
 
-create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with a test number, but outside Management Studio, all tests are still executed]
-as
-begin
-	declare @totalExecutedTests int = null;
 
-	-- Arrange
-	exec tSQLt.ExpectException 'ERROR: Should not execute specific tests ("1") in CI environment.';
-	exec tSQLt.SpyProcedure 'tSQLt.Run';
-	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
-	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_Off';
-	
-	-- Act
-	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 1;
-
-	-- Assert
-	-- ExpectException
-end
+exec tSQLt.Run '[tSQLt_Helpers_Tests_Run_Tests]';
 go
 
-
-exec [tSQLt_Helpers].Run 'tSQLt_Helpers_Tests_Run_Tests';
-go
 
 exec tSQLt.DropClass 'Numerical_Runner_Tests';
 go
 
 exec tSQLt.DropClass 'tSQLt_Helpers_Tests_Run_Tests';
 go
+
 
