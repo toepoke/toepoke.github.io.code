@@ -76,6 +76,7 @@
     <Compile Include="ForEachGenericMethodExample\ForEachGenericMethodTests.cs" />
     <Compile Include="Misc\AtSigns_In_Variables.cs" />
     <Compile Include="Misc\Authentication.Tests.cs" />
+    <Compile Include="Misc\DoubleForLoops.Tests.cs" />
     <Compile Include="Misc\VS2017_Debugger_Improvements.Tests.cs" />
     <Compile Include="NewCSharpFeatures\CSharp 6.0\CSharp6 - Await inside catch...finally.cs" />
     <Compile Include="NewCSharpFeatures\CSharp 6.0\CSharp6 - Null Conditional Operators.cs" />
