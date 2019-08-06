@@ -25,6 +25,18 @@ function tidyTargetLink(href) {
 } // tidyTargetLink
 
 
+function tidyLinkText(text) {
+	if (!text) {
+		return "";
+	}
+
+	// google bookmarks often adds an elipses when it doesn't give the full title of the URL
+	text = text.replace("...", "");
+
+	return text;
+} // tidyLinkText
+
+
 // 
 // The comment field on the page includes tag information (e.g. "[tag1,tag2,tag3]") which is of no
 // use to our readers.
@@ -88,7 +100,7 @@ function markdownify(hits) {
 		markdown += `* [${text}](${href})`;
 		// add notes if there are any
 		if (info && info !== "") {
-			markdown += `- *${info}*`;
+			markdown += ` - *${info}*`;
 		}
 		markdown += "\n";
 	}
@@ -126,6 +138,9 @@ function main() {
 			// remove addition stuff GB adds (e.g. they use a redirect)
 			hit.href = tidyTargetLink(hit.href);
 
+			// apply any common replacements on the link title text
+			hit.text = tidyLinkText(hit.text);
+
 			// we may have addition notes to the link we want including
 			var infoId = id.replace("_href_", "_info_");
 			var infoEles = link.parentElement.parentElement.parentElement.querySelectorAll("td span#" + infoId);
@@ -153,3 +168,4 @@ console.info(markdown);
 console.warn(hits, `\n${hits.length} markdown links have been copied to the clipboard.`);
 console.info("Once you're done, remember to scroll to the bottom");
 console.info("'Manage Labels' to delete the '11' label so we're ready for next time!");
+

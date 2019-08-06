@@ -1,4 +1,3 @@
-
 exec tSQLt.NewTestClass 'tSQLt_Helpers';
 go
 
@@ -58,7 +57,7 @@ begin
 	if @testSchema is null and @testNum is null
 	begin
 		if @DEBUG = 1 Print 'TEST RUNNER: RunAll(no-parameters)';
-		exec tSQLt.RunAll;
+		exec tSQLt.RunAll
 		return 0;
 	end
 	if @testSchema is not null and @testNum is null
@@ -69,20 +68,36 @@ begin
 	end
 
 	declare @foundTestName nvarchar(512) = null;
-	declare @testNumString nvarchar(512) = convert(nvarchar(10), @testNum);
 	declare @numTestsFound int = null;
 
-	-- Are there multiple tests with the same test number?
-	select @numTestsFound = count(1)
-	from   INFORMATION_SCHEMA.ROUTINES procs
-	where  procs.ROUTINE_SCHEMA = @testSchema
-	and
+	-- Find all matches for the given test number ...
+	select *
+	into #hits
+	from
 	(
-	     ROUTINE_NAME like 'Test #' + @testNumString + ')%'
-		or ROUTINE_NAME like 'Test #%0' + @testNumString + ')%'
-		or ROUTINE_NAME like 'Test #%00' + @testNumString + ')%'
-		or ROUTINE_NAME like 'Test #%000' + @testNumString + ')%'
-	)
+		select 
+			convert(int, SubString(ROUTINE_NAME, TestNumStart, (TestNumEnd - TestNumStart))) TestNumFound
+			, ROUTINE_NAME
+		from 
+		(
+			select 
+				@testNum FindTestNumber
+				, PATINDEX('Test #%', ROUTINE_NAME) + Len('Test #') TestNumStart
+				,	PATINDEX('%)%', ROUTINE_NAME) TestNumEnd
+				, ROUTINE_NAME
+			from   INFORMATION_SCHEMA.ROUTINES procs
+			where  procs.ROUTINE_SCHEMA = @testSchema
+				 and procs.ROUTINE_NAME like 'Test #%) %'
+		) testNumMatches
+		where 
+			TestNumStart >= 0 and TestNumEnd > TestNumStart
+	) hits
+	where TestNumFound = @testNum
+
+	-- Should only find one test number
+	-- ... if there's more than one we chuck an error as having two test "1"s makes no sense!
+	select @numTestsFound = count(1) 
+	from #hits
 
 	if @numTestsFound > 1
 	begin
@@ -95,25 +110,12 @@ begin
 		return 2;
 	end
 
-	-- Look for an exact match
+	-- If we get here we've found a single test number to run, so 
+	-- find the full name of the test so we can execute it through tSQLt
 	select top 1 @foundTestName = ROUTINE_NAME
-	from   INFORMATION_SCHEMA.ROUTINES procs
-	where  procs.ROUTINE_SCHEMA = @testSchema
-	and    ROUTINE_NAME like 'Test #' + @testNumString + ')%';
-
-	if @foundTestName is null
-	begin
-		-- No exact match, so find any tests with a zero prefix
-		select top 1 @foundTestName = ROUTINE_NAME
-		from   INFORMATION_SCHEMA.ROUTINES procs
-		where  procs.ROUTINE_SCHEMA = @testSchema
-		and 
-		(
-				 ROUTINE_NAME like 'Test #%0' + @testNumString + ')%'
-			or ROUTINE_NAME like 'Test #%00' + @testNumString + ')%'
-			or ROUTINE_NAME like 'Test #%000' + @testNumString + ')%'
-		)
-	end
+	from #hits
+	
+	drop table #hits
 
 	-- Execute the found test
 	declare @testRunner nvarchar(512) = QuoteName(@testSchema) + '.' + QuoteName(@foundTestName);
@@ -121,6 +123,7 @@ begin
 	exec tSQLt.Run @testRunner
 end
 go
+
 
 
 -- Unit tests used for testing the runner
@@ -175,17 +178,17 @@ begin
 end
 go
 
-create function [tSQLt_Helpers_Tests_Run_Tests].Fake_ForceIsInStudio_On()
+ create function [tSQLt_Helpers_Tests_Run_Tests].Fake_ForceIsInStudio_On()
 returns bit
 begin
 	return 1;
 end
 go
 
-
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with no parameters RunAll is also called with no parameters]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 	
 	exec tSQLt_Helpers.Run null, null;
@@ -200,6 +203,7 @@ go
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with schema parameters RunAll is also called schema parameters]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', null;
@@ -214,11 +218,10 @@ go
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with "1", test "#01" is executed]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
-
-	-- We're actually testing this function, so we don't want it erroring because we have a specific test number :)	
-	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
+	
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 1;
 
 	if not exists(select 1 from tSQLt.Run_SpyProcedureLog where TestName = '[Numerical_Runner_Tests].[Test #01) - test 01]')
@@ -231,11 +234,10 @@ go
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with "11", test "11" is executed]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 	
-	-- We're actually testing this function, so we don't want it erroring because we have a specific test number :)	
-	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 11;
 
 	if not exists(select 1 from tSQLt.Run_SpyProcedureLog where TestName = '[Numerical_Runner_Tests].[Test #011) - test 011]')
@@ -248,11 +250,10 @@ go
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with "2", multiple tests error is raised]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 
-	-- We're actually testing this function, so we don't want it erroring because we have a specific test number :)	
-	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.ExpectException 'Multiple tests with id "2" were found.';
 	
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 2;
@@ -262,11 +263,10 @@ go
 create procedure [tSQLt_Helpers_Tests_Run_Tests].[Test - When tSQLt_Helpers.Run is called with a non-existent test number, an error is generated]
 as
 begin
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
 
-	-- We're actually testing this function, so we don't want it erroring because we have a specific test number :)	
-	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_On';
 	exec tSQLt.ExpectException 'Could not find test number 1234567890.';
 	
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 1234567890;
@@ -279,10 +279,10 @@ begin
 	declare @totalExecutedTests int = null;
 
 	-- Arrange
+	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_Off';
 	exec tSQLt.ExpectException 'ERROR: Should not execute specific tests ("1") in CI environment.';
 	exec tSQLt.SpyProcedure 'tSQLt.Run';
 	exec tSQLt.SpyProcedure 'tSQLt.RunAll';
-	exec tSQLt.FakeFunction 'tSQLt_Helpers.IsInStudio', 'tSQLt_Helpers_Tests_Run_Tests.Fake_ForceIsInStudio_Off';
 	
 	-- Act
 	exec tSQLt_Helpers.Run 'Numerical_Runner_Tests', 1;
@@ -292,9 +292,9 @@ begin
 end
 go
 
-
-exec [tSQLt_Helpers].Run 'tSQLt_Helpers_Tests_Run_Tests';
+exec tSQLt.Run '[tSQLt_Helpers_Tests_Run_Tests]';
 go
+
 
 exec tSQLt.DropClass 'Numerical_Runner_Tests';
 go
