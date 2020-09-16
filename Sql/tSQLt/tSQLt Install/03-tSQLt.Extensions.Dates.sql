@@ -9,7 +9,7 @@ create procedure tSQLt.Private_AssertDateEquals
 	@expectedDateTime datetime2
 	, @actualDateTime datetime2
 	, @failureMessage varchar(255) = ''
-	, @gracePeriodMs int = 100
+	, @gracePeriodMs int = 300
 	, @failMessage varchar(255) output
 as
 begin
@@ -128,12 +128,34 @@ begin
 end
 go
 
--- UNIT TESTS
 
-exec tSQLt.NewTestClass 'tSQLt_Extensions_Dates_Tests';
+if exists(select name from sysobjects where name = N'Pass' and type = 'P')
+begin
+	drop procedure tSQLt.Pass;
+end
 go
 
-create procedure [tSQLt_Extensions_Dates_Tests].[Test #01) - AssertDate - should fail when actual date is just outside threshold lower boundary]
+create procedure tSQLt.Pass
+	@failureMessage varchar(255) = ''
+as
+begin
+	-- Description
+	-- ===========
+	--
+	--    Provides a convenient way to have a passing test to illustrate coverage of a scenario
+	--    that doesn't need test coverage (so you don't come across it in the future and think a test needs adding)
+	--
+	declare @nop bit = 1;
+end
+go
+
+
+-- UNIT TESTS
+
+exec tSQLt.NewTestClass 'tSQLt_Extensions_Tests';
+go
+
+create procedure [tSQLt_Extensions_Tests].[Test #01) - AssertDate - should fail when actual date is just outside threshold lower boundary]
 as
 begin
 	declare @actual datetime2 = null;
@@ -151,7 +173,7 @@ end
 go
 
 
-create procedure [tSQLt_Extensions_Dates_Tests].[Test #02) - AssertDateEquals - should pass when actual date is on threshold lower boundary]
+create procedure [tSQLt_Extensions_Tests].[Test #02) - AssertDateEquals - should pass when actual date is on threshold lower boundary]
 as
 begin
 	declare @actual datetime2 = null;
@@ -169,7 +191,7 @@ end
 go
 
 
-create procedure [tSQLt_Extensions_Dates_Tests].[Test #03) - AssertDateEquals - should pass when actual date is just inside threshold lower boundary]
+create procedure [tSQLt_Extensions_Tests].[Test #03) - AssertDateEquals - should pass when actual date is just inside threshold lower boundary]
 as
 begin
 	declare @actual datetime2 = null;
@@ -187,7 +209,7 @@ end
 go
 
 
-create procedure [tSQLt_Extensions_Dates_Tests].[Test #04) - AssertDateEquals - should pass when dates are the same]
+create procedure [tSQLt_Extensions_Tests].[Test #04) - AssertDateEquals - should pass when dates are the same]
 as
 begin
 	declare @actual datetime = null;
@@ -205,7 +227,7 @@ end
 go
 
 
-create procedure [tSQLt_Extensions_Dates_Tests].[Test #05) - AssertDateEquals - should pass when actual date is just inside threshold upper boundary]
+create procedure [tSQLt_Extensions_Tests].[Test #05) - AssertDateEquals - should pass when actual date is just inside threshold upper boundary]
 as
 begin
 	declare @actual datetime2 = null;
@@ -223,7 +245,7 @@ end
 go
 
 
-create procedure [tSQLt_Extensions_Dates_Tests].[Test #06) - AssertDateEquals - should pass when actual date is on threshold upper boundary]
+create procedure [tSQLt_Extensions_Tests].[Test #06) - AssertDateEquals - should pass when actual date is on threshold upper boundary]
 as
 begin
 	declare @actual datetime2 = null;
@@ -241,7 +263,7 @@ end
 go
 
 
-create procedure [tSQLt_Extensions_Dates_Tests].[Test #07) - AssertDateEquals - should fail when actual date is on just ouside threshold upper boundary]
+create procedure [tSQLt_Extensions_Tests].[Test #07) - AssertDateEquals - should fail when actual date is on just ouside threshold upper boundary]
 as
 begin
 	declare @actual datetime2 = null;
@@ -259,7 +281,7 @@ end
 go
 
 
-create procedure [tSQLt_Extensions_Dates_Tests].[Test #08) - AssertDate - should pass when custom grace period is used (under)]
+create procedure [tSQLt_Extensions_Tests].[Test #08) - AssertDate - should pass when custom grace period is used (under)]
 as
 begin
 	declare @actual datetime2 = null;
@@ -281,7 +303,7 @@ end
 go
 
 
-create procedure [tSQLt_Extensions_Dates_Tests].[Test #09) - AssertDate - should pass when custom grace period is used (over)]
+create procedure [tSQLt_Extensions_Tests].[Test #09) - AssertDate - should pass when custom grace period is used (over)]
 as
 begin
 	declare @actual datetime2 = null;
@@ -302,9 +324,23 @@ begin
 end
 go
 
-exec tSQLt.Run 'tSQLt_Extensions_Dates_Tests';
+
+create procedure [tSQLt_Extensions_Tests].[Test #10) - Pass - should not fail]
+as
+begin
+	-- Arrange
+
+	-- Act
+	exec tSQLt.Pass 'No error should be raised.';
+	
+	-- Assert
+end
 go
 
-exec tSQLt.DropClass 'tSQLt_Extensions_Dates_Tests';
+
+exec tSQLt.Run 'tSQLt_Extensions_Tests';
+go
+
+exec tSQLt.DropClass 'tSQLt_Extensions_Tests';
 go
 
