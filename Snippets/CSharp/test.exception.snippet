@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Tripple A Exception</Title>
+      <Shortcut>aaae</Shortcut>
+      <Description>Code snippet adding a unit test that verifies an exception is throw, caught and asserted</Description>
+      <Author>F.J.</Author>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp"><![CDATA[
+		[TestMethod, ExpectedException(typeof(SecurityException))]
+		public void $TestName$() {
+
+			// Arrange
+
+			try {
+				// Act
+				model = handler.Query(query);
+			}
+			catch (SecurityException e) {
+				// Assert
+				e.Should().BeOfType<SecurityException>();
+				e.Message.Should().Be($$@"");
+				// Still throw otherwise the test will pass if an exception isn't throw!
+				throw;
+			}
+
+		} // $TestName$
+      ]]></Code>
+	  <Declarations>
+		<Literal>
+			<ID>TestName</ID>
+			<ToolTip>Name of the test</ToolTip>
+		</Literal>
+	  </Declarations>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
+
