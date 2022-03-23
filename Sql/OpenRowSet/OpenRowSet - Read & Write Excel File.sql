@@ -47,25 +47,28 @@ begin transaction
 
 	begin try
 		Print 'READ ********************'
-		select *
-		into MyShoppingList
+		select 'Test reading Excel file' Scenario, *
+		into #MyShoppingList
 		from OpenRowSet(
 			'Microsoft.ACE.OLEDB.12.0', 
 			'Excel 12.0; HDR=YES; IMEX=1;
-				Database={DIRECTORY}\My-Shopping-List.xlsx', 
+				Database=E:\Dev\ShadowIT\BPA\trunk\_Documents\My-Shopping-List.xlsx', 
 			'SELECT * FROM [SheetRead$]'
 		)
 
-		select * from MyShoppingList
+		select * from #MyShoppingList
 
 		select 
 			cols.COLUMN_NAME, cols.DATA_TYPE
 		from 
 			information_schema.columns cols
 		where
-			cols.table_name = 'MyShoppingList'
+			cols.table_name like '%MyShoppingList%'
 				
-		drop table MyShoppingList
+		if OBJECT_ID('tempdb..#Results') is not null
+		begin
+			drop table #MyShoppingList
+		end
 	end try
 	begin catch
 		Print ERROR_NUMBER()
@@ -75,13 +78,21 @@ begin transaction
 
 rollback
 
-
-	Print 'WRITE ********************'
 	insert into OpenRowSet(
 		'Microsoft.ACE.OLEDB.12.0', 
-		'Excel 12.0;Database={DIRECTORY}\My-Shopping-List.xlsx', 
+		'Excel 12.0;Database=E:\Dev\ShadowIT\BPA\trunk\_Documents\My-Shopping-List.xlsx', 
 		'SELECT * FROM [SheetWrite$]'
 	)
 	select 4 Id, 'Food' Category, 'Biscuits' BasketItem
+	Select 'Test writing to Excel', @@ROWCOUNT [ROWCOUNT]
+
+	select 'Test readback after writing to Excel file' Scenario, *
+	from OpenRowSet(
+		'Microsoft.ACE.OLEDB.12.0', 
+		'Excel 12.0; HDR=YES; IMEX=1;
+			Database=E:\Dev\ShadowIT\BPA\trunk\_Documents\My-Shopping-List.xlsx', 
+		'SELECT * FROM [SheetWrite$]'
+	)
+
 
 
