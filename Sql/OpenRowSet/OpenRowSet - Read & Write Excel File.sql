@@ -61,7 +61,7 @@ begin transaction
 		select 
 			cols.COLUMN_NAME, cols.DATA_TYPE
 		from 
-			information_schema.columns cols
+			tempdb.information_schema.columns cols
 		where
 			cols.table_name like '%MyShoppingList%'
 				
