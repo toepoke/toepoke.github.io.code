@@ -52,7 +52,7 @@ begin transaction
 		from OpenRowSet(
 			'Microsoft.ACE.OLEDB.12.0', 
 			'Excel 12.0; HDR=YES; IMEX=1;
-				Database=E:\Dev\ShadowIT\BPA\trunk\_Documents\My-Shopping-List.xlsx', 
+				Database={DIRECTORY}\My-Shopping-List.xlsx', 
 			'SELECT * FROM [SheetRead$]'
 		)
 
@@ -80,7 +80,7 @@ rollback
 
 	insert into OpenRowSet(
 		'Microsoft.ACE.OLEDB.12.0', 
-		'Excel 12.0;Database=E:\Dev\ShadowIT\BPA\trunk\_Documents\My-Shopping-List.xlsx', 
+		'Excel 12.0;Database={DIRECTORY}\My-Shopping-List.xlsx', 
 		'SELECT * FROM [SheetWrite$]'
 	)
 	select 4 Id, 'Food' Category, 'Biscuits' BasketItem
@@ -90,7 +90,7 @@ rollback
 	from OpenRowSet(
 		'Microsoft.ACE.OLEDB.12.0', 
 		'Excel 12.0; HDR=YES; IMEX=1;
-			Database=E:\Dev\ShadowIT\BPA\trunk\_Documents\My-Shopping-List.xlsx', 
+			Database={DIRECTORY}\My-Shopping-List.xlsx', 
 		'SELECT * FROM [SheetWrite$]'
 	)
 
