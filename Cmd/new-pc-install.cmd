@@ -22,6 +22,10 @@ winget install -e --id Microsoft.PowerToys
 :: Optional (uncomment to install)
 :: winget install -e --id  Microsoft.Azure.StorageExplorer
 
+:: NPM global packages
+npm install --global yarn
+npm install --global rimraf
+
 :: Productivity
 winget install -e --id TheDocumentFoundation.LibreOffice
 
