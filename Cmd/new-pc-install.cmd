@@ -23,7 +23,7 @@ winget install -e --id Microsoft.PowerToys
 :: winget install -e --id  Microsoft.Azure.StorageExplorer
 
 :: Productivity
-winget install -e --id=TheDocumentFoundation.LibreOffice
+winget install -e --id TheDocumentFoundation.LibreOffice
 
 :: Outlook for Windows - doesn't work - fails to connect to the SMTP server, no error, nothing :(
 :: winget install -e --id=9NRX63209R7B -i --source=msstore --accept-package-agreements
