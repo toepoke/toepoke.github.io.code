@@ -1,12 +1,14 @@
 
 :: Development tools
-winget install -e --id OpenJS.NodeJS
+winget install -e --id OpenJS.NodeJS.TLS
 winget install -e --id Microsoft.NuGet
 winget install -e --id Microsoft.VisualStudioCode
+winget install -e --id Microsoft.VisualStudio.2022.Community
 winget install -e --id WinMerge.WinMerge
 winget install -e --id Microsoft.SQLServerManagementStudio
 winget install -e --id Git.Git
 winget install -e --id Microsoft.PowerShell
+winget install -e --id Microsoft.AzureCLI
 
 :: Utilities
 winget install -e --id Microsoft.WindowsPCHealthCheck
@@ -17,12 +19,20 @@ winget install -e --id Notepad++.Notepad++
 winget install -e --id IDRIX.VeraCrypt
 winget install -e --id Microsoft.PowerToys
 
+:: Optional (uncomment to install)
+:: winget install -e --id  Microsoft.Azure.StorageExplorer
+
 :: Productivity
-:: Outlook for Windows
-winget install -e --id=9NRX63209R7B -i --source=msstore --accept-package-agreements
 winget install -e --id=TheDocumentFoundation.LibreOffice
 
+:: Outlook for Windows - doesn't work - fails to connect to the SMTP server, no error, nothing :(
+:: winget install -e --id=9NRX63209R7B -i --source=msstore --accept-package-agreements
 
+:: Dotnet tool
+dotnet tool install --global dotnet-eft
+
+:: Update packages collectively
+winget upgrade --all
 
 :: Try separately
 	:: winget install -e --id Microsoft.SQLServer.2019.Developer --custom /SQLCOLLATION=SQL_Latin1_General_CP1_CI_AS
